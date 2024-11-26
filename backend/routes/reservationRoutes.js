@@ -3,22 +3,24 @@ const Reservation = require('../models/Reservation');
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-  try {
-    const reservation = new Reservation(req.body);
-    await reservation.save();
-    res.status(201).json({ message: 'Reservation created successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating reservation', error });
-  }
-});
-
+// Obtener todas las reservaciones
 router.get('/', async (req, res) => {
   try {
     const reservations = await Reservation.find();
     res.json(reservations);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching reservations', error });
+  }
+});
+
+// Crear una nueva reservación
+router.post('/', async (req, res) => {
+  try {
+    const reservation = new Reservation(req.body);
+    await reservation.save();
+    res.status(201).json(reservation); // Retorna la reservación creada
+  } catch (error) {
+    res.status(400).json({ message: 'Error creating reservation', error });
   }
 });
 
